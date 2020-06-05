@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema id="org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect" path="/org/gnome/shell/extensions/ncom/github/hermes83/compiz-windows-effect/">
+
+		<key type="d" name="friction">
+			<default>2.5</default>
+			<summary>Friction</summary>
+			<description/>
+		</key>
+
+		<key type="d" name="spring-k">
+			<default>8.0</default>
+			<summary>Spring k</summary>
+			<description/>
+		</key>
+
+		<key type="d" name="slowdown-factor">
+			<default>1.0</default>
+			<summary>Slowdown Factor</summary>
+			<description/>
+		</key>
+
+		<key type="d" name="object-movement-range">
+			<default>500.0</default>
+			<summary>Object Movement Range</summary>
+			<description/>
+		</key>
+
+	</schema>
+</schemalist>
+
+
+
+

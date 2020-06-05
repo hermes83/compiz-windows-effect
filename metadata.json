@@ -1,0 +1,14 @@
+{
+  "description": "Wobbly windows effect using libAnimation",
+  "name": "Compiz windows effect",
+  "shell-version": [
+    "3.28",
+    "3.30",
+    "3.32",
+    "3.34",
+    "3.36"
+  ],
+  "url": "https://github.com/hermes83/compiz-windows-effect",
+  "uuid": "compiz-windows-effect@hermes83.github.com",
+  "version": 1
+}
