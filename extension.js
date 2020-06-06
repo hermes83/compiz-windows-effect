@@ -14,20 +14,23 @@ let timeoutWobblyId;
 
 function enable() {
     grabOpBeginId = global.display.connect('grab-op-begin', (display, screen, window, op) => {
-        if (!Utils.is_managed_op(op)) {
-            return;
-        }
-
         let actor = Utils.get_actor(window);
         if (actor) {
             stop_wobbly_timer();
-            
+
             Utils.destroy_actor_wobbly_effect(actor);
-            Utils.add_actor_wobbly_effect(actor, op);
+
+            if (Utils.is_managed_op(op)) {
+                Utils.add_actor_wobbly_effect(actor, op);   
+            }
         }
     });
 
     grabOpEndId = global.display.connect('grab-op-end', (display, screen, window, op) => {  
+        if (!Utils.is_managed_op(op)) {
+            return;
+        }
+        
         let actor = Utils.get_actor(window);
         if (actor) {
             timeoutWobblyId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, TIMEOUT_DELAY, () => {
