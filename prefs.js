@@ -7,6 +7,8 @@ let frictionSlider = null;
 let springKSlider = null;
 let speedupFactor = null;
 let objectMovementRange = null;
+let xTailsSlider = null;
+let yTailsSlider = null;
 
 function init() { }
 
@@ -23,6 +25,8 @@ function buildPrefsWidget() {
 	springKSlider = addSlider(frame, "Spring", config.SPRING_K, 2.0, 10.0, 1);
 	speedupFactor = addSlider(frame, "Speedup Factor", config.SPEEDUP_FACTOR, 1.0, 40.0, 1);
 	objectMovementRange = addSlider(frame, "Object Movement Range", config.OBJECT_MOVEMENT_RANGE, 10.0, 500.0, 0);
+	xTailsSlider = addSlider(frame, "X Tails", config.X_TAILS, 3.0, 20.0, 0);
+	yTailsSlider = addSlider(frame, "Y Tails", config.Y_TAILS, 3.0, 20.0, 0);
 
 	addDefaultButton(frame, config);
 
@@ -38,11 +42,15 @@ function addDefaultButton(frame, config) {
 		config.SPRING_K.set(8.0);
 		config.SPEEDUP_FACTOR.set(1.0);
 		config.OBJECT_MOVEMENT_RANGE.set(500.0);
+		config.X_TAILS.set(8.0);
+		config.Y_TAILS.set(6.0);
 
 		frictionSlider.set_value(config.FRICTION.get());
 		springKSlider.set_value(config.SPRING_K.get());
 		speedupFactor.set_value(config.SPEEDUP_FACTOR.get());
 		objectMovementRange.set_value(config.OBJECT_MOVEMENT_RANGE.get());
+		xTailsSlider.set_value(config.X_TAILS.get());
+		yTailsSlider.set_value(config.Y_TAILS.get());
 	});
 
 	frame.pack_end(button, false, false, 0);

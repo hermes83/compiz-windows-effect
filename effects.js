@@ -17,18 +17,15 @@ var WobblyEffect = GObject.registerClass({},
             this.allocationChangedEvent = null;
             this.paintEvent = null;
             this.newFrameEvent = null;
-            this.resizeWidthEvent = null;
-            this.resizeHeightEvent = null;
+            this.resizeEvent = null;
             
             this.timerId = null;
             this.initOldValues = true;
-            this.xPickedUp = 0;
-            this.yPickedUp = 0;
             this.width = 0;
             this.height = 0;
             this.xMouse = 0;
             this.yMouse = 0;
-            this.msecOld = 0;
+            this.margin = 2;
 
             this.wobblyModel = null;
             this.anchor = null;
@@ -45,17 +42,19 @@ var WobblyEffect = GObject.registerClass({},
             this.SPRING_K = prefs.SPRING_K.get();
             this.SPEEDUP_FACTOR = prefs.SPEEDUP_FACTOR.get();
             this.OBJECT_MOVEMENT_RANGE = prefs.OBJECT_MOVEMENT_RANGE.get();
+            this.X_TAILS = prefs.X_TAILS.get();
+            this.Y_TAILS = prefs.Y_TAILS.get();
+
+            this.set_n_tiles(this.X_TAILS, this.Y_TAILS);
         }
 
         vfunc_set_actor(actor) {
             super.vfunc_set_actor(actor);
 
-            this.set_n_tiles(8, 6);
-
             if (actor) {
                 [this.width, this.height] = actor.get_size();
                 [this.position.x, this.position.y] = [0.0, 0.0];
-                [this.size.x, this.size.y] = [this.width + 4, this.height + 4];
+                [this.size.x, this.size.y] = [this.width + this.margin, this.height + this.margin];
 
                 this.wobblyModel = new Animation.WobblyModel({
                     friction: this.FRICTION, 
@@ -67,8 +66,7 @@ var WobblyEffect = GObject.registerClass({},
 
                 this.allocationChangedEvent = actor.connect('allocation-changed', this.on_actor_event.bind(this));
                 this.paintEvent = actor.connect('paint', () => null);
-                this.resizeWidthEvent = actor.connect('notify::width', this.resized.bind(this));
-                this.resizeHeightEvent = actor.connect('notify::height', this.resized.bind(this));
+                this.resizeEvent = actor.connect('notify::size', this.resized.bind(this));
                 this.start_timer(this.on_tick_elapsed.bind(this));
             }
         }
@@ -94,7 +92,7 @@ var WobblyEffect = GObject.registerClass({},
         resized(actor, params) {
             [this.width, this.height] = actor.get_size();
 
-            [this.size.x, this.size.y] = [this.width + 4, this.height + 4];
+            [this.size.x, this.size.y] = [this.width + this.margin, this.height + this.margin];
             this.wobblyModel.resize(this.size);
         }
 
@@ -106,8 +104,8 @@ var WobblyEffect = GObject.registerClass({},
                 this.anchor = null;
             }
 
-            if (this.model) {
-                this.model = null;
+            if (this.wobblyModel) {
+                this.wobblyModel = null;
             }
             
             let actor = this.get_actor();
@@ -122,14 +120,9 @@ var WobblyEffect = GObject.registerClass({},
                     this.allocationChangedEvent = null;
                 }
 
-                if (this.resizeWidthEvent) {
-                    actor.disconnect(this.resizeWidthEvent);
-                    this.resizeWidthEvent = null;
-                }
-
-                if (this.resizeHeightEvent) {
-                    actor.disconnect(this.resizeHeightEvent);
-                    this.resizeHeightEvent = null;
+                if (this.resizeEvent) {
+                    actor.disconnect(this.resizeEvent);
+                    this.resizeEvent = null;
                 }
 
                 actor.remove_effect(this);
@@ -160,13 +153,9 @@ var WobblyEffect = GObject.registerClass({},
         }
 
         on_tick_elapsed(timer, msec) {
-            if (this.wobblyModel) {
-                this.wobblyModel.step(this.SPEEDUP_FACTOR);
+            this.wobblyModel.step(this.SPEEDUP_FACTOR);
 
-                this.invalidate();
-            }
-
-            this.msecOld = msec;
+            this.invalidate();
         }
 
         vfunc_deform_vertex(w, h, v) {

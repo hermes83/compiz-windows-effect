@@ -26,6 +26,18 @@
 			<description/>
 		</key>
 
+		<key type="d" name="x-tails">
+			<default>8.0</default>
+			<summary>X Tails</summary>
+			<description/>
+		</key>
+
+		<key type="d" name="y-tails">
+			<default>6.0</default>
+			<summary>Y Tails</summary>
+			<description/>
+		</key>
+
 	</schema>
 </schemalist>
 
