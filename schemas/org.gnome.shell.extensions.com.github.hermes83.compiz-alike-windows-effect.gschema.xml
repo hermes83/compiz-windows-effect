@@ -14,9 +14,9 @@
 			<description/>
 		</key>
 
-		<key type="d" name="slowdown-factor">
+		<key type="d" name="speedup-factor">
 			<default>1.0</default>
-			<summary>Slowdown Factor</summary>
+			<summary>Speedup Factor</summary>
 			<description/>
 		</key>
 

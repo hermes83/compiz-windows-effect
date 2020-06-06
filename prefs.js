@@ -5,7 +5,7 @@ let Settings = Extension.imports.settings;
 
 let frictionSlider = null;
 let springKSlider = null;
-let slowdownFactor = null;
+let speedupFactor = null;
 let objectMovementRange = null;
 
 function init() { }
@@ -21,7 +21,7 @@ function buildPrefsWidget() {
 
 	frictionSlider = addSlider(frame, "Friction", config.FRICTION, 2.0, 10.0, 1);
 	springKSlider = addSlider(frame, "Spring", config.SPRING_K, 2.0, 10.0, 1);
-	slowdownFactor = addSlider(frame, "Slowdown Factor", config.SLOWDOWN_FACTOR, 1.0, 5.0, 1);
+	speedupFactor = addSlider(frame, "Speedup Factor", config.SPEEDUP_FACTOR, 1.0, 40.0, 1);
 	objectMovementRange = addSlider(frame, "Object Movement Range", config.OBJECT_MOVEMENT_RANGE, 10.0, 500.0, 0);
 
 	addDefaultButton(frame, config);
@@ -36,12 +36,12 @@ function addDefaultButton(frame, config) {
 	button.connect('clicked', function () {
 		config.FRICTION.set(2.5);
 		config.SPRING_K.set(8.0);
-		config.SLOWDOWN_FACTOR.set(1.0);
+		config.SPEEDUP_FACTOR.set(1.0);
 		config.OBJECT_MOVEMENT_RANGE.set(500.0);
 
 		frictionSlider.set_value(config.FRICTION.get());
 		springKSlider.set_value(config.SPRING_K.get());
-		slowdownFactor.set_value(config.SLOWDOWN_FACTOR.get());
+		speedupFactor.set_value(config.SPEEDUP_FACTOR.get());
 		objectMovementRange.set_value(config.OBJECT_MOVEMENT_RANGE.get());
 	});
 

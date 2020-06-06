@@ -45,8 +45,8 @@ function Prefs() {
 		disconnect: function () { return settings.disconnect.apply(settings, arguments); },
 	};
 
-	this.SLOWDOWN_FACTOR = {
-		key: 'slowdown-factor',
+	this.SPEEDUP_FACTOR = {
+		key: 'speedup-factor',
 		get: function () { return settings.get_double(this.key); },
 		set: function (v) { settings.set_double(this.key, v); },
 		changed: function (cb) { return settings.connect('changed::' + this.key, cb); },

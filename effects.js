@@ -43,7 +43,7 @@ var WobblyEffect = GObject.registerClass({},
             let prefs = (new Settings.Prefs());
             this.FRICTION = prefs.FRICTION.get();
             this.SPRING_K = prefs.SPRING_K.get();
-            this.SLOWDOWN_FACTOR = prefs.SLOWDOWN_FACTOR.get();
+            this.SPEEDUP_FACTOR = prefs.SPEEDUP_FACTOR.get();
             this.OBJECT_MOVEMENT_RANGE = prefs.OBJECT_MOVEMENT_RANGE.get();
         }
 
@@ -161,7 +161,7 @@ var WobblyEffect = GObject.registerClass({},
 
         on_tick_elapsed(timer, msec) {
             if (this.wobblyModel) {
-                this.wobblyModel.step((msec - this.msecOld) / 500 / this.SLOWDOWN_FACTOR + 1);
+                this.wobblyModel.step(this.SPEEDUP_FACTOR);
 
                 this.invalidate();
             }
