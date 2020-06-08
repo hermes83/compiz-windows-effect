@@ -3,7 +3,7 @@
 	<schema id="org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect" path="/org/gnome/shell/extensions/ncom/github/hermes83/compiz-windows-effect/">
 
 		<key type="d" name="friction">
-			<default>2.5</default>
+			<default>2</default>
 			<summary>Friction</summary>
 			<description/>
 		</key>
@@ -33,7 +33,7 @@
 		</key>
 
 		<key type="d" name="y-tails">
-			<default>6.0</default>
+			<default>7.0</default>
 			<summary>Y Tails</summary>
 			<description/>
 		</key>

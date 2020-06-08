@@ -34,7 +34,6 @@ var WobblyEffect = GObject.registerClass({},
             this.anchorPosition = new Animation.Vector();
             this.delta = new Animation.Vector();
             this.reverseDelta = new Animation.Vector();
-            this.uv = new Animation.Vector();  
             this.deformed = null;
 
             let prefs = (new Settings.Prefs());
@@ -159,10 +158,7 @@ var WobblyEffect = GObject.registerClass({},
         }
 
         vfunc_deform_vertex(w, h, v) {
-            [this.uv.x, this.uv.y] = [v.ty, v.tx];
-            this.deformed = this.wobblyModel.deform_texcoords(this.uv);
-
-            [v.x, v.y] = [this.deformed.x, this.deformed.y];
+            [v.x, v.y] = this.wobblyModel.deform_texcoords_plain(v.ty, v.tx);
         }
 
     }

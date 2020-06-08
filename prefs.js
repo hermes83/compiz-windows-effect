@@ -38,12 +38,12 @@ function buildPrefsWidget() {
 function addDefaultButton(frame, config) {
 	let button = new Gtk.Button({label: "Reset to default"});
 	button.connect('clicked', function () {
-		config.FRICTION.set(2.5);
+		config.FRICTION.set(2.0);
 		config.SPRING_K.set(8.0);
 		config.SPEEDUP_FACTOR.set(1.0);
 		config.OBJECT_MOVEMENT_RANGE.set(500.0);
 		config.X_TAILS.set(8.0);
-		config.Y_TAILS.set(6.0);
+		config.Y_TAILS.set(7.0);
 
 		frictionSlider.set_value(config.FRICTION.get());
 		springKSlider.set_value(config.SPRING_K.get());
