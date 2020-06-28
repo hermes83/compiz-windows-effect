@@ -61,16 +61,16 @@ function Prefs() {
 		disconnect: function () { return settings.disconnect.apply(settings, arguments); },
 	};
 
-	this.X_TAILS = {
-		key: 'x-tails',
+	this.X_TILES = {
+		key: 'x-tiles',
 		get: function () { return settings.get_double(this.key); },
 		set: function (v) { settings.set_double(this.key, v); },
 		changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
 		disconnect: function () { return settings.disconnect.apply(settings, arguments); },
 	};
 
-	this.Y_TAILS = {
-		key: 'y-tails',
+	this.Y_TILES = {
+		key: 'y-tiles',
 		get: function () { return settings.get_double(this.key); },
 		set: function (v) { settings.set_double(this.key, v); },
 		changed: function (cb) { return settings.connect('changed::' + this.key, cb); },

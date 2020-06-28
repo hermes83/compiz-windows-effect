@@ -26,21 +26,17 @@
 			<description/>
 		</key>
 
-		<key type="d" name="x-tails">
+		<key type="d" name="x-tiles">
 			<default>8.0</default>
-			<summary>X Tails</summary>
+			<summary>X Tiles</summary>
 			<description/>
 		</key>
 
-		<key type="d" name="y-tails">
+		<key type="d" name="y-tiles">
 			<default>7.0</default>
-			<summary>Y Tails</summary>
+			<summary>Y Tiles</summary>
 			<description/>
 		</key>
 
 	</schema>
 </schemalist>
-
-
-
-

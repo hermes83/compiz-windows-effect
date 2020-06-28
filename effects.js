@@ -38,13 +38,14 @@ var WobblyEffect = GObject.registerClass({},
 
             let prefs = (new Settings.Prefs());
             this.FRICTION = prefs.FRICTION.get();
-            this.SPRING_K = prefs.SPRING_K.get();
+            this.SPRING_K = prefs.SPRING_K.get();            
+            
             this.SPEEDUP_FACTOR = prefs.SPEEDUP_FACTOR.get();
             this.OBJECT_MOVEMENT_RANGE = prefs.OBJECT_MOVEMENT_RANGE.get();
-            this.X_TAILS = prefs.X_TAILS.get();
-            this.Y_TAILS = prefs.Y_TAILS.get();
+            this.X_TILES = prefs.X_TILES.get();
+            this.Y_TILES = prefs.Y_TILES.get();
 
-            this.set_n_tiles(this.X_TAILS, this.Y_TAILS);
+            this.set_n_tiles(this.X_TILES, this.Y_TILES);
         }
 
         vfunc_set_actor(actor) {
