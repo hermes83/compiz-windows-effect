@@ -38,5 +38,10 @@
 			<description/>
 		</key>
 
+		<key type="b" name="js-engine">
+			<default>true</default>
+			<summary>JS Engine</summary>
+			<description/>
+		</key>
 	</schema>
 </schemalist>

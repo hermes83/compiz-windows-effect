@@ -9,6 +9,7 @@ let speedupFactor = null;
 let objectMovementRange = null;
 let xTilesSlider = null;
 let yTilesSlider = null;
+let jsEngineSwitch = null;
 
 function init() { }
 
@@ -27,6 +28,7 @@ function buildPrefsWidget() {
 	objectMovementRange = addSlider(frame, "Object Movement Range", config.OBJECT_MOVEMENT_RANGE, 10.0, 500.0, 0);
 	xTilesSlider = addSlider(frame, "X Tiles", config.X_TILES, 3.0, 20.0, 0);
 	yTilesSlider = addSlider(frame, "Y Tiles", config.Y_TILES, 3.0, 20.0, 0);
+	jsEngineSwitch = addBooleanSwitch(frame, "JS Engine", config.JS_ENGINE);
 
 	addDefaultButton(frame, config);
 
@@ -44,6 +46,7 @@ function addDefaultButton(frame, config) {
 		config.OBJECT_MOVEMENT_RANGE.set(500.0);
 		config.X_TILES.set(8.0);
 		config.Y_TILES.set(7.0);
+		config.JS_ENGINE.set(true);
 
 		frictionSlider.set_value(config.FRICTION.get());
 		springKSlider.set_value(config.SPRING_K.get());
@@ -51,6 +54,7 @@ function addDefaultButton(frame, config) {
 		objectMovementRange.set_value(config.OBJECT_MOVEMENT_RANGE.get());
 		xTilesSlider.set_value(config.X_TILES.get());
 		yTilesSlider.set_value(config.Y_TILES.get());
+		jsEngineSwitch.set_active(config.JS_ENGINE.get());
 	});
 
 	frame.pack_end(button, false, false, 0);

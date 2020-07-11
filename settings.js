@@ -76,4 +76,12 @@ function Prefs() {
 		changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
 		disconnect: function () { return settings.disconnect.apply(settings, arguments); },
 	};
+
+	this.JS_ENGINE = {
+		key: 'js-engine',
+		get: function () { return settings.get_boolean(this.key); },
+		set: function (v) { settings.set_boolean(this.key, v); },
+		changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
+		disconnect: function () { return settings.disconnect.apply(settings, arguments); },
+	};
 };

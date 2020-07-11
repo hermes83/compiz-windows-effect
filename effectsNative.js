@@ -25,7 +25,7 @@ var WobblyEffect = GObject.registerClass({},
             this.height = 0;
             this.xMouse = 0;
             this.yMouse = 0;
-            this.margin = 2;
+            this.margin = 3;
 
             this.wobblyModel = null;
             this.anchor = null;

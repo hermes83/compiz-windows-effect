@@ -3,9 +3,13 @@
 const Meta = imports.gi.Meta;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Effects = Me.imports.effects;
+const Extension = ExtensionUtils.getCurrentExtension();
+const Settings = Extension.imports.settings;
+const Effects = ((new Settings.Prefs()).JS_ENGINE.get()) ? Me.imports.effectsJs : Me.imports.effectsNative;
 
 const EFFECT_NAME = 'wobbly-compiz-effect';
+
+var currentEffect = null;
 
 var is_managed_op = function (op) {
     return Meta.GrabOp.MOVING == op;
@@ -25,6 +29,8 @@ var has_wobbly_effect = function (actor) {
 var add_actor_wobbly_effect = function (actor, op) { 
     if (actor && Meta.GrabOp.MOVING == op) {
         actor.add_effect_with_name(EFFECT_NAME, new Effects.WobblyEffect({op: op}));
+
+        currentEffect = actor.get_effect(EFFECT_NAME);
     }
 }
 
@@ -34,5 +40,10 @@ var destroy_actor_wobbly_effect = function (actor) {
         if (effect) {
             effect.destroy();
         }
+    } 
+
+    if (currentEffect) {
+        currentEffect.destroy();
     }
+    currentEffect = null;
 }
