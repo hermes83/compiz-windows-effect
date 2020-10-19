@@ -11,10 +11,10 @@ const Config = imports.misc.config;
 const EFFECT_NAME = 'wobbly-compiz-effect';
 
 const IS_OLD_SHELL_VERSIONS = Config.PACKAGE_VERSION.startsWith("3.36") ||
-		Config.PACKAGE_VERSION.startsWith("3.34") ||
-		Config.PACKAGE_VERSION.startsWith("3.32") ||
-		Config.PACKAGE_VERSION.startsWith("3.30") ||
-		Config.PACKAGE_VERSION.startsWith("3.28");
+        Config.PACKAGE_VERSION.startsWith("3.34") ||
+        Config.PACKAGE_VERSION.startsWith("3.32") ||
+        Config.PACKAGE_VERSION.startsWith("3.30") ||
+        Config.PACKAGE_VERSION.startsWith("3.28");
 
 var currentEffect = null;
 
