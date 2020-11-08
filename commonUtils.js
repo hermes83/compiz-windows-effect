@@ -16,10 +16,16 @@ const IS_OLD_SHELL_VERSIONS = Config.PACKAGE_VERSION.startsWith("3.36") ||
         Config.PACKAGE_VERSION.startsWith("3.30") ||
         Config.PACKAGE_VERSION.startsWith("3.28");
 
+const HAS_GLOBAL_DISPLAY = !Config.PACKAGE_VERSION.startsWith("3.28");
+
 var currentEffect = null;
 
 var is_old_shell_versions = function () {
     return IS_OLD_SHELL_VERSIONS;
+}
+
+var has_global_display = function () {
+    return HAS_GLOBAL_DISPLAY;
 }
 
 var is_managed_op = function (op) {
