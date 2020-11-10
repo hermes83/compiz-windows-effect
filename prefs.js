@@ -40,12 +40,12 @@ function buildPrefsWidget() {
 function addDefaultButton(frame, config) {
     let button = new Gtk.Button({label: "Reset to default"});
     button.connect('clicked', function () {
-        config.FRICTION.set(3.0);
-        config.SPRING_K.set(9.0);
-        config.SPEEDUP_FACTOR.set(1.0);
-        config.OBJECT_MOVEMENT_RANGE.set(200.0);
-        config.X_TILES.set(8.0);
-        config.Y_TILES.set(7.0);
+        config.FRICTION.set(2.5);
+        config.SPRING_K.set(8.5);
+        config.SPEEDUP_FACTOR.set(1.5);
+        config.OBJECT_MOVEMENT_RANGE.set(250.0);
+        config.X_TILES.set(7.0);
+        config.Y_TILES.set(6.0);
         config.JS_ENGINE.set(true);
 
         frictionSlider.set_value(config.FRICTION.get());

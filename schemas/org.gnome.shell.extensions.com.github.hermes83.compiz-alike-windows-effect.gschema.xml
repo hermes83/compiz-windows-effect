@@ -14,7 +14,7 @@
             <description/>
         </key>
 
-        <key type="d" name="speedup-factor">
+        <key type="d" name="speedup-factor-divider">
             <default>1.0</default>
             <summary>Speedup Factor</summary>
             <description/>

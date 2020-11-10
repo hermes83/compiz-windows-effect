@@ -28,6 +28,7 @@ var WobblyEffect = GObject.registerClass({},
             this.xMouse = 0;
             this.yMouse = 0;
             this.margin = 3;
+            this.msecOld = 0;
 
             this.wobblyModel = null;
             this.anchor = null;
@@ -93,10 +94,13 @@ var WobblyEffect = GObject.registerClass({},
         start_timer(timerFunction, actor) {
             this.stop_timer();
             if (Utils.is_old_shell_versions()) {
-                this.timerId = new Clutter.Timeline({ duration: CLUTTER_TIMELINE_DURATION });
+                this.timerId = new Clutter.Timeline();
             } else {
-                this.timerId = new Clutter.Timeline({ duration: CLUTTER_TIMELINE_DURATION, actor: actor });
+                this.timerId = new Clutter.Timeline({ actor: actor });
             }
+
+            this.timerId.set_duration(CLUTTER_TIMELINE_DURATION);
+
             this.newFrameEvent = this.timerId.connect('new-frame', timerFunction);
             this.timerId.start();      
         }
@@ -170,7 +174,8 @@ var WobblyEffect = GObject.registerClass({},
         }
 
         on_tick_elapsed(timer, msec) {
-            this.wobblyModel.step(this.SPEEDUP_FACTOR);
+            this.wobblyModel.step(1 + (msec - this.msecOld) / this.SPEEDUP_FACTOR);
+            this.msecOld = msec;
             this.invalidate();
         }
         
