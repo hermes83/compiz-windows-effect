@@ -170,7 +170,7 @@ var WobblyEffect = GObject.registerClass({},
         }
 
         on_tick_elapsed(timer, msec) {
-            this.wobblyModel.step(1 + (msec - this.msecOld) / this.SPEEDUP_FACTOR);
+            this.wobblyModel.Step(1 + (msec - this.msecOld) / this.SPEEDUP_FACTOR);
             this.msecOld = msec;
             this.invalidate();
         }
