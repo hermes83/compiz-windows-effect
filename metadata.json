@@ -7,9 +7,10 @@
     "3.32",
     "3.34",
     "3.36",
-    "3.38"
+    "3.38",
+    "40.0"
   ],
   "url": "https://github.com/hermes83/compiz-windows-effect",
   "uuid": "compiz-windows-effect@hermes83.github.com",
-  "version": 6
+  "version": 8
 }
