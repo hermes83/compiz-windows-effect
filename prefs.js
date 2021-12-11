@@ -77,14 +77,20 @@ function buildPrefsWidget() {
 }
 
 function addDefaultButton(frame, config) {
-    let button = new Gtk.Button({label: "Reset to default"});
+    let button = null;
+    if (IS_3_XX_SHELL_VERSION) {
+        button = new Gtk.Button({label: "Reset to default"});
+    } else {
+        button = new Gtk.Button({label: "Reset to default", vexpand: true, valign: Gtk.Align.END});
+    }
+
     button.connect('clicked', function () {
-        config.FRICTION.set(2.5);
-        config.SPRING_K.set(8.5);
-        config.SPEEDUP_FACTOR.set(1.5);
-        config.OBJECT_MOVEMENT_RANGE.set(250.0);
-        config.X_TILES.set(7.0);
-        config.Y_TILES.set(6.0);
+        config.FRICTION.set(2.0);
+        config.SPRING_K.set(10.0);
+        config.SPEEDUP_FACTOR.set(20.0);
+        config.OBJECT_MOVEMENT_RANGE.set(400.0);
+        config.X_TILES.set(6.0);
+        config.Y_TILES.set(5.0);
         config.JS_ENGINE.set(true);
 
         frictionSlider.set_value(config.FRICTION.get());
@@ -113,6 +119,9 @@ function addSlider(frame, labelText, prefConfig, lower, upper, decimalDigits) {
         hexpand: true, 
         halign: Gtk.Align.END
     });
+    if (!IS_3_XX_SHELL_VERSION) {
+        scale.set_draw_value(true);
+    }
     scale.set_value(prefConfig.get());
     scale.connect('value-changed', function (sw) {
         var newval = sw.get_value();
