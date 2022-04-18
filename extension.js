@@ -23,19 +23,17 @@
  */
 'use strict';
 
-const { GLib, Meta } = imports.gi;
+const Main = imports.ui.main;
+const Meta = imports.gi.Meta;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const Utils = Me.imports.commonUtils;
-
-const TIMEOUT_DELAY = 2000;
+const Extension = ExtensionUtils.getCurrentExtension();
+const Utils = Extension.imports.commonUtils;
 
 let grabOpBeginId;
 let grabOpEndId;
-let resizeMinMaxOpId;
+let resizeOpId;
 let minimizeId;
 let unminimizeId;
-let timeoutWobblyId;
 let destroyId;
 
 function init() {}
@@ -61,66 +59,72 @@ function enable() {
         });
     }
 
-    resizeMinMaxOpId = global.window_manager.connect('size-change', (e, actor, op) => {
+    resizeOpId = global.window_manager.connect('size-change', (e, actor, op) => {
         if (op == 0) {
-            stopEffect(actor);
+            maximizeStart(actor, op);
+        } else {
+            unmaximizeStart(actor, op);
         }
     });
     
     minimizeId = global.window_manager.connect("minimize", (e, actor) => {
-        stopEffect(actor);
+        Utils.destroy_actor_effect(actor);
     });
     
     unminimizeId = global.window_manager.connect("unminimize", (e, actor) => {
-        stopEffect(actor);
+        Utils.destroy_actor_effect(actor);
     });
 
     destroyId = global.window_manager.connect("destroy", (e, actor) => {
-        stopEffect(actor);
+        Utils.destroy_actor_effect(actor);
     });
 }
 
 function disable() {    
     global.display.disconnect(grabOpBeginId);
     global.display.disconnect(grabOpEndId);
-    global.display.disconnect(resizeMinMaxOpId);
+    global.display.disconnect(resizeOpId);
     global.display.disconnect(minimizeId);
     global.display.disconnect(unminimizeId);    
     global.window_manager.disconnect(destroyId);
     
-    stop_wobbly_timer();
-    
     global.get_window_actors().forEach((actor) => {
-        Utils.destroy_actor_wobbly_effect(actor);
+        Utils.destroy_actor_effect(actor);
     });
 }
 
-function stop_wobbly_timer() {
-    if (timeoutWobblyId) {
-        GLib.source_remove(timeoutWobblyId);
-        timeoutWobblyId = 0;
+function maximizeStart(actor, op) {
+    Utils.destroy_actor_effect(actor);
+
+    if (Utils.is_managed_op(op)) {
+        Utils.add_actor_effect(actor, 'maximized');
     }
 }
 
-function stopEffect(actor) {
-    if (Utils.has_wobbly_effect(actor)) {
-        stop_wobbly_timer();
+function unmaximizeStart(actor, op) {
+    if (Utils.is_managed_op(op)) {
+        let effect = Utils.get_effect(actor);
+        if (!effect || 'move' != effect.operationType) {
+            Utils.destroy_actor_effect(actor);
 
-        if (actor) {
-            Utils.destroy_actor_wobbly_effect(actor);
-        }
+            Utils.add_actor_effect(actor, 'unmaximized');   
+        } 
     }
 }
 
 function grabStart(window, op) {
     let actor = Utils.get_actor(window);
-    if (actor) {            
-        stop_wobbly_timer();
+    if (actor) {
+        Utils.destroy_actor_effect(actor);
 
-        Utils.destroy_actor_wobbly_effect(actor);
+        if (!Utils.is_managed_op(op)) {
+            return;
+        }
 
-        if (Utils.is_managed_op(op)) {
-            Utils.add_actor_wobbly_effect(actor, op);   
+        if (Meta.GrabOp.MOVING == op) {
+            Utils.add_actor_effect(actor, 'move');
+        } else {
+            Utils.add_actor_effect(actor, op);
         }
     }
 }
@@ -132,15 +136,9 @@ function grabEnd(window, op) {
     
     let actor = Utils.get_actor(window);
     if (actor) {
-        timeoutWobblyId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, TIMEOUT_DELAY, () => {
-            stop_wobbly_timer();
-
-            let actor = Utils.get_actor(window);
-            if (actor) {
-                Utils.destroy_actor_wobbly_effect(actor);
-            }
-
-            return false;
-        });
-    }
+        var effect = Utils.get_effect(actor);
+        if (effect) {
+            effect.on_end_event(actor);
+        }
+    } 
 }

@@ -31,10 +31,11 @@ const IS_3_XX_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3");
 let frictionSlider = null;
 let springKSlider = null;
 let speedupFactor = null;
-let objectMovementRange = null;
+let massSlider = null;
 let xTilesSlider = null;
 let yTilesSlider = null;
-let jsEngineSwitch = null;
+let maximizeEffectSwitch = null;
+let resizeEffectSwitch = null;
 
 function init() { }
 
@@ -61,11 +62,12 @@ function buildPrefsWidget() {
 
     frictionSlider = addSlider(frame, "Friction", config.FRICTION, 1.0, 10.0, 1);
     springKSlider = addSlider(frame, "Spring", config.SPRING_K, 1.0, 10.0, 1);
-    speedupFactor = addSlider(frame, "Speedup Factor", config.SPEEDUP_FACTOR, 1.0, 40.0, 1);
-    objectMovementRange = addSlider(frame, "Object Movement Range", config.OBJECT_MOVEMENT_RANGE, 10.0, 500.0, 0);
+    speedupFactor = addSlider(frame, "Speedup Factor", config.SPEEDUP_FACTOR, 2.0, 40.0, 1);
+    massSlider = addSlider(frame, "Mass", config.MASS, 20.0, 80.0, 0);
     xTilesSlider = addSlider(frame, "X Tiles", config.X_TILES, 3.0, 20.0, 0);
     yTilesSlider = addSlider(frame, "Y Tiles", config.Y_TILES, 3.0, 20.0, 0);
-    jsEngineSwitch = addBooleanSwitch(frame, "JS Engine", config.JS_ENGINE);
+    maximizeEffectSwitch = addBooleanSwitch(frame, "Maximize effect", config.MAXIMIZE_EFFECT);
+    resizeEffectSwitch = addBooleanSwitch(frame, "Resize effect", config.RESIZE_EFFECT);
 
     addDefaultButton(frame, config);
 
@@ -86,20 +88,22 @@ function addDefaultButton(frame, config) {
 
     button.connect('clicked', function () {
         config.FRICTION.set(2.0);
-        config.SPRING_K.set(10.0);
-        config.SPEEDUP_FACTOR.set(20.0);
-        config.OBJECT_MOVEMENT_RANGE.set(400.0);
+        config.SPRING_K.set(7.0);
+        config.SPEEDUP_FACTOR.set(16.0);
+        config.MASS.set(50.0);
         config.X_TILES.set(6.0);
-        config.Y_TILES.set(5.0);
-        config.JS_ENGINE.set(true);
+        config.Y_TILES.set(6.0);
+        config.MAXIMIZE_EFFECT.set(true);
+        config.RESIZE_EFFECT.set(false);
 
         frictionSlider.set_value(config.FRICTION.get());
         springKSlider.set_value(config.SPRING_K.get());
         speedupFactor.set_value(config.SPEEDUP_FACTOR.get());
-        objectMovementRange.set_value(config.OBJECT_MOVEMENT_RANGE.get());
+        massSlider.set_value(config.MASS.get());
         xTilesSlider.set_value(config.X_TILES.get());
         yTilesSlider.set_value(config.Y_TILES.get());
-        jsEngineSwitch.set_active(config.JS_ENGINE.get());
+        maximizeEffectSwitch.set_active(config.MAXIMIZE_EFFECT.get());
+        resizeEffectSwitch.set_active(config.RESIZE_EFFECT.get());
     });
 
     if (IS_3_XX_SHELL_VERSION) {

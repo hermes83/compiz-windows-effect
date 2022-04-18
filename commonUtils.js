@@ -25,7 +25,6 @@
 
 const Meta = imports.gi.Meta;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
 const Extension = ExtensionUtils.getCurrentExtension();
 const Settings = Extension.imports.settings;
 const Config = imports.misc.config;
@@ -36,8 +35,8 @@ const IS_3_XX_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3");
 const IS_3_38_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3.38");
 const HAS_GLOBAL_DISPLAY = !Config.PACKAGE_VERSION.startsWith("3.28");
 
-const Effects = IS_3_XX_SHELL_VERSION ? Me.imports.effects3 : Me.imports.effects;
-var currentEffect = null;
+const WobblyEffect = IS_3_XX_SHELL_VERSION ? Extension.imports.wobblyEffect3 : Extension.imports.wobblyEffect;
+const ResizeEffect = IS_3_XX_SHELL_VERSION ? Extension.imports.resizeEffect3 : Extension.imports.resizeEffect;
 
 var is_3_xx_shell_version = function () {
     return IS_3_XX_SHELL_VERSION;
@@ -52,35 +51,44 @@ var has_global_display = function () {
 }
 
 var is_managed_op = function (op) {
-    return Meta.GrabOp.MOVING == op;
+    if (Meta.GrabOp.MOVING == op || Meta.GrabOp.NONE == op) {
+        return true;   
+    }
+
+    let prefs = (new Settings.Prefs());
+    if (prefs.RESIZE_EFFECT.get() && (Meta.GrabOp.RESIZING_W == op || Meta.GrabOp.RESIZING_E == op || Meta.GrabOp.RESIZING_S == op || Meta.GrabOp.RESIZING_N == op || Meta.GrabOp.RESIZING_NW == op || Meta.GrabOp.RESIZING_NE == op || Meta.GrabOp.RESIZING_SE == op || Meta.GrabOp.RESIZING_SW == op)) {
+        return true;
+    }
 }
 
 var get_actor = function(window) {
     return window ? window.get_compositor_private() : null;
 }
 
-var has_wobbly_effect = function (actor) {
-    return actor && actor.get_effect(EFFECT_NAME);
+var get_effect = function (actor) {
+    return actor.get_effect(EFFECT_NAME);
 }
 
-var add_actor_wobbly_effect = function (actor, op) { 
-    if (actor && Meta.GrabOp.MOVING == op) {
-        actor.add_effect_with_name(EFFECT_NAME, new Effects.WobblyEffect({op: op}));
-
-        currentEffect = actor.get_effect(EFFECT_NAME);
+var add_actor_effect = function (actor, op) { 
+    if (actor) {
+        if ('move' == op) {
+            actor.add_effect_with_name(EFFECT_NAME, new WobblyEffect.WobblyEffect({op: op}));
+        } else if ('maximized' == op || 'unmaximized' == op ) {
+            let prefs = (new Settings.Prefs());
+            if (prefs.MAXIMIZE_EFFECT.get()) {
+                actor.add_effect_with_name(EFFECT_NAME, new WobblyEffect.WobblyEffect({op: op}));
+            }
+        } else {
+            actor.add_effect_with_name(EFFECT_NAME, new ResizeEffect.ResizeEffect({op: op}));
+        }
     }
 }
 
-var destroy_actor_wobbly_effect = function (actor) {
+var destroy_actor_effect = function (actor) {
     if (actor) {
         let effect = actor.get_effect(EFFECT_NAME);
         if (effect) {
             effect.destroy();
         }
-    } 
-
-    if (currentEffect) {
-        currentEffect.destroy();
     }
-    currentEffect = null;
 }

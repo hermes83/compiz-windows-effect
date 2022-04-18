@@ -1,5 +1,5 @@
 {
-  "description": "Compiz wobbly windows effect thanks to libanimation engine.\n\nThe use of the \"js engine\" option NOT requires any external library, orherwise you need to install the LIBANIMATION library patched for Gnome Shell: \nhttps://github.com/hermes83/libanimation\n\nNB:\nIn case of update error please restart Gnome Shell (on Xorg press ALT+F2 then write r and press enter, on Wayland end the session and log in again)\n\n-----------------------------------\n  Video\n-----------------------------------\nhttps://youtu.be/G8bAVIB9A7A",
+  "description": "Compiz wobbly windows effect thanks to compiz plugin engine.\n\nDoes NOT requires any external library\n\nNB:\nIn case of update error please restart Gnome Shell (on Xorg press ALT+F2 then write r and press enter, on Wayland end the session and log in again)\n\n-----------------------------------\n  Video\n-----------------------------------\nhttps://youtu.be/G8bAVIB9A7A",
   "name": "Compiz windows effect",
   "shell-version": [
     "3.28",

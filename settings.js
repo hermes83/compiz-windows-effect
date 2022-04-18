@@ -76,8 +76,8 @@ function Prefs() {
         disconnect: function () { return settings.disconnect.apply(settings, arguments); },
     };
     
-    this.OBJECT_MOVEMENT_RANGE = {
-        key: 'object-movement-range',
+    this.MASS = {
+        key: 'mass',
         get: function () { return settings.get_double(this.key); },
         set: function (v) { settings.set_double(this.key, v); },
         changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
@@ -100,11 +100,20 @@ function Prefs() {
         disconnect: function () { return settings.disconnect.apply(settings, arguments); },
     };
 
-    this.JS_ENGINE = {
-        key: 'js-engine',
+    this.MAXIMIZE_EFFECT = {
+        key: 'maximize-effect',
         get: function () { return settings.get_boolean(this.key); },
         set: function (v) { settings.set_boolean(this.key, v); },
         changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
         disconnect: function () { return settings.disconnect.apply(settings, arguments); },
     };
+
+    this.RESIZE_EFFECT = {
+        key: 'resize-effect',
+        get: function () { return settings.get_boolean(this.key); },
+        set: function (v) { settings.set_boolean(this.key, v); },
+        changed: function (cb) { return settings.connect('changed::' + this.key, cb); },
+        disconnect: function () { return settings.disconnect.apply(settings, arguments); },
+    };
+
 };
