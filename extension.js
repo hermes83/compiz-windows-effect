@@ -83,9 +83,9 @@ function enable() {
 function disable() {    
     global.display.disconnect(grabOpBeginId);
     global.display.disconnect(grabOpEndId);
-    global.display.disconnect(resizeOpId);
-    global.display.disconnect(minimizeId);
-    global.display.disconnect(unminimizeId);    
+    global.window_manager.disconnect(resizeOpId);
+    global.window_manager.disconnect(minimizeId);
+    global.window_manager.disconnect(unminimizeId);    
     global.window_manager.disconnect(destroyId);
     
     global.get_window_actors().forEach((actor) => {
