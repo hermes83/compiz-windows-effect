@@ -3,13 +3,13 @@
     <schema id="org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect" path="/org/gnome/shell/extensions/com/github/hermes83/compiz-windows-effect/">
 
         <key type="d" name="friction">
-            <default>2</default>
+            <default>3.5</default>
             <summary>Friction</summary>
             <description/>
         </key>
 
         <key type="d" name="spring-k">
-            <default>7.0</default>
+            <default>8.5</default>
             <summary>Spring k</summary>
             <description/>
         </key>
