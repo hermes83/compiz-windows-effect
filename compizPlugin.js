@@ -67,6 +67,8 @@ var WobblyModel = class WobblyModel {
         this.deltaY = 0;
         this.vertex_count = 0;
         this.immobileObjects = [];
+        this.coeff = null;
+        this.deformedObjects = null;
     
         this.x = config.positionX;
         this.y = config.positionY;
@@ -80,6 +82,7 @@ var WobblyModel = class WobblyModel {
         
         this.initObjects();
         this.initSprings();
+        this.initDeformedObjects();
     }
 
     dispose() {
@@ -122,6 +125,42 @@ var WobblyModel = class WobblyModel {
                 }
     
                 i++;
+            }
+        }
+    }
+
+    initDeformedObjects() {
+        this.coeff = new Array(this.tilesY + 1);
+        this.deformedObjects = new Array(this.tilesY + 1);
+    
+        var x, y, tx, ty;
+        for (y = 0; y <= this.tilesY; y++) {
+            this.coeff[y] = new Array(this.tilesX + 1);
+            this.deformedObjects[y] = new Array(this.tilesX + 1);
+    
+            for (x = 0; x <= this.tilesX; x++) {
+                tx = x / this.tilesX;
+                ty = y / this.tilesY;
+
+                this.coeff[y][x] = new Array(16);
+                this.deformedObjects[y][x] = {x: tx * this.width, y: ty * this.height};
+    
+                this.coeff[y][x][0] = (1 - tx) * (1 - tx) * (1 - tx) * (1 - ty) * (1 - ty) * (1 - ty);
+                this.coeff[y][x][1] = 3 * tx * (1 - tx) * (1 - tx) * (1 - ty) * (1 - ty) * (1 - ty);
+                this.coeff[y][x][2] = 3 * tx * tx * (1 - tx) * (1 - ty) * (1 - ty) * (1 - ty);
+                this.coeff[y][x][3] = tx * tx * tx * (1 - ty) * (1 - ty) * (1 - ty);
+                this.coeff[y][x][4] = 3 * (1 - tx) * (1 - tx) * (1 - tx) * ty * (1 - ty) * (1 - ty);
+                this.coeff[y][x][5] = 9 * tx * (1 - tx) * (1 - tx) * ty * (1 - ty) * (1 - ty);
+                this.coeff[y][x][6] = 9 * tx * tx * (1 - tx) * ty * (1 - ty) * (1 - ty);
+                this.coeff[y][x][7] = 3 * tx * tx * tx * ty * (1 - ty) * (1 - ty);
+                this.coeff[y][x][8] = 3 * (1 - tx) * (1 - tx) * (1 - tx) * ty * ty * (1 - ty);
+                this.coeff[y][x][9] = 3 * tx * (1 - tx) * (1 - tx) * 3 * ty * ty * (1 - ty);
+                this.coeff[y][x][10] = 9 * tx * tx * (1 - tx) * ty * ty * (1 - ty);
+                this.coeff[y][x][11] = 3 * tx * tx * tx * ty * ty * (1 - ty);
+                this.coeff[y][x][12] = (1 - tx) * (1 - tx) * (1 - tx) * ty * ty * ty;
+                this.coeff[y][x][13] = 3 * tx * (1 - tx) * (1 - tx) * ty * ty * ty;
+                this.coeff[y][x][14] = 3 * tx * tx * (1 - tx) * ty * ty * ty;
+                this.coeff[y][x][15] = tx * tx * tx * ty * ty * ty;
             }
         }
     }
@@ -224,7 +263,7 @@ var WobblyModel = class WobblyModel {
             }
         }
         
-        this.step(1);
+        this.step(0);
     }
 
     unmaximize() {
@@ -248,7 +287,7 @@ var WobblyModel = class WobblyModel {
             }
         }
         
-        this.step(1);
+        this.step(0);
     }
 
     step(steps) {
@@ -290,6 +329,46 @@ var WobblyModel = class WobblyModel {
                         object.forceY = 0.0;
                     }
                 }
+            }
+        }
+
+        var x, y;
+        for (y = 0; y <= this.tilesY; y++) {
+            for (x = 0; x <= this.tilesX; x++) {
+                this.deformedObjects[y][x].x = 
+                    this.coeff[y][x][0] * this.objects[0].x
+                    + this.coeff[y][x][1] * this.objects[1].x
+                    + this.coeff[y][x][2] * this.objects[2].x
+                    + this.coeff[y][x][3] * this.objects[3].x
+                    + this.coeff[y][x][4] * this.objects[4].x
+                    + this.coeff[y][x][5] * this.objects[5].x
+                    + this.coeff[y][x][6] * this.objects[6].x
+                    + this.coeff[y][x][7] * this.objects[7].x
+                    + this.coeff[y][x][8] * this.objects[8].x
+                    + this.coeff[y][x][9] * this.objects[9].x
+                    + this.coeff[y][x][10] * this.objects[10].x
+                    + this.coeff[y][x][11] * this.objects[11].x
+                    + this.coeff[y][x][12] * this.objects[12].x
+                    + this.coeff[y][x][13] * this.objects[13].x
+                    + this.coeff[y][x][14] * this.objects[14].x
+                    + this.coeff[y][x][15] * this.objects[15].x;
+                this.deformedObjects[y][x].y = 
+                    this.coeff[y][x][0] * this.objects[0].y
+                    + this.coeff[y][x][1] * this.objects[1].y
+                    + this.coeff[y][x][2] * this.objects[2].y
+                    + this.coeff[y][x][3] * this.objects[3].y
+                    + this.coeff[y][x][4] * this.objects[4].y
+                    + this.coeff[y][x][5] * this.objects[5].y
+                    + this.coeff[y][x][6] * this.objects[6].y
+                    + this.coeff[y][x][7] * this.objects[7].y
+                    + this.coeff[y][x][8] * this.objects[8].y
+                    + this.coeff[y][x][9] * this.objects[9].y
+                    + this.coeff[y][x][10] * this.objects[10].y
+                    + this.coeff[y][x][11] * this.objects[11].y
+                    + this.coeff[y][x][12] * this.objects[12].y
+                    + this.coeff[y][x][13] * this.objects[13].y
+                    + this.coeff[y][x][14] * this.objects[14].y
+                    + this.coeff[y][x][15] * this.objects[15].y;
             }
         }
 

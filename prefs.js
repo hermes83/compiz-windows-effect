@@ -87,8 +87,8 @@ function addDefaultButton(frame, config) {
     }
 
     button.connect('clicked', function () {
-        config.FRICTION.set(2.0);
-        config.SPRING_K.set(7.0);
+        config.FRICTION.set(3.5);
+        config.SPRING_K.set(8.5);
         config.SPEEDUP_FACTOR.set(16.0);
         config.MASS.set(50.0);
         config.X_TILES.set(6.0);

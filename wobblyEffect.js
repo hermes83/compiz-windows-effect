@@ -204,45 +204,8 @@ var WobblyEffect = GObject.registerClass({},
         }
 
         vfunc_deform_vertex(w, h, v) {
-            v.x = (
-                (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[0].x
-                + (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[4].x
-                + (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[8].x
-                + (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * v.ty * v.ty * v.ty * this.wobblyModel.objects[12].x
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[1].x
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[5].x
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[9].x
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * v.ty * v.ty * v.ty * this.wobblyModel.objects[13].x
-                + 3 * v.tx * v.tx * (1 - v.tx) * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[2].x
-                + 3 * v.tx * v.tx * (1 - v.tx) * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[6].x
-                + 3 * v.tx * v.tx * (1 - v.tx) * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[10].x
-                + 3 * v.tx * v.tx * (1 - v.tx) * v.ty * v.ty * v.ty * this.wobblyModel.objects[14].x
-                + v.tx * v.tx * v.tx * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[3].x
-                + v.tx * v.tx * v.tx * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[7].x
-                + v.tx * v.tx * v.tx * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[11].x
-                + v.tx * v.tx * v.tx * v.ty * v.ty * v.ty * this.wobblyModel.objects[15].x
-                + this.wobblyModel.deltaX
-            ) * w / this.wobblyModel.width;
-            
-            v.y = (
-                (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[0].y
-                + (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[4].y
-                + (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[8].y
-                + (1 - v.tx) * (1 - v.tx) * (1 - v.tx) * v.ty * v.ty * v.ty * this.wobblyModel.objects[12].y
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[1].y
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[5].y
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[9].y
-                + 3 * v.tx * (1 - v.tx) * (1 - v.tx) * v.ty * v.ty * v.ty * this.wobblyModel.objects[13].y
-                + 3 * v.tx * v.tx * (1 - v.tx) * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[2].y
-                + 3 * v.tx * v.tx * (1 - v.tx) * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[6].y
-                + 3 * v.tx * v.tx * (1 - v.tx) * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[10].y
-                + 3 * v.tx * v.tx * (1 - v.tx) * v.ty * v.ty * v.ty * this.wobblyModel.objects[14].y
-                + v.tx * v.tx * v.tx * (1 - v.ty) * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[3].y
-                + v.tx * v.tx * v.tx * 3 * v.ty * (1 - v.ty) * (1 - v.ty) * this.wobblyModel.objects[7].y
-                + v.tx * v.tx * v.tx * 3 * v.ty * v.ty * (1 - v.ty) * this.wobblyModel.objects[11].y
-                + v.tx * v.tx * v.tx * v.ty * v.ty * v.ty * this.wobblyModel.objects[15].y
-                + this.wobblyModel.deltaY
-            ) * h / this.wobblyModel.height;
+            v.x = (this.wobblyModel.deformedObjects[~~((v.ty + 0.01) * this.Y_TILES)][~~((v.tx + 0.01) * this.X_TILES)].x + this.wobblyModel.deltaX) * w / this.width;
+            v.y = (this.wobblyModel.deformedObjects[~~((v.ty + 0.01) * this.Y_TILES)][~~((v.tx + 0.01) * this.X_TILES)].y + this.wobblyModel.deltaY) * h / this.height;
         }
     }
 );
