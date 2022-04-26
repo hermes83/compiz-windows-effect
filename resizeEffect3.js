@@ -24,7 +24,6 @@
 'use strict';
 
 const { GObject, Clutter, Meta } = imports.gi;
-const Main = imports.ui.main;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const Settings = Extension.imports.settings;
 const Utils = Extension.imports.commonUtils;

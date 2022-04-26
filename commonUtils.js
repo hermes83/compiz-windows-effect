@@ -33,7 +33,6 @@ const EFFECT_NAME = 'wobbly-compiz-effect';
 
 const IS_3_XX_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3");
 const IS_3_38_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3.38");
-const HAS_GLOBAL_DISPLAY = !Config.PACKAGE_VERSION.startsWith("3.28");
 
 const WobblyEffect = IS_3_XX_SHELL_VERSION ? Extension.imports.wobblyEffect3 : Extension.imports.wobblyEffect;
 const ResizeEffect = IS_3_XX_SHELL_VERSION ? Extension.imports.resizeEffect3 : Extension.imports.resizeEffect;
@@ -44,10 +43,6 @@ var is_3_xx_shell_version = function () {
 
 var is_3_38_shell_version = function () {
     return IS_3_38_SHELL_VERSION;
-}
-
-var has_global_display = function () {
-    return HAS_GLOBAL_DISPLAY;
 }
 
 var is_managed_op = function (op) {
@@ -61,7 +56,7 @@ var is_managed_op = function (op) {
     }
 }
 
-var get_actor = function(window) {
+var get_actor = function (window) {
     return window ? window.get_compositor_private() : null;
 }
 

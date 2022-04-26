@@ -26,7 +26,6 @@
 const { GObject, Clutter, Meta } = imports.gi;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const Settings = Extension.imports.settings;
-const Utils = Extension.imports.commonUtils;
 
 const CLUTTER_TIMELINE_END_RESIZE_EFFECT_DURATION = 1000;
 

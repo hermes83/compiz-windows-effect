@@ -23,7 +23,6 @@
  */
 'use strict';
 
-const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
@@ -61,7 +60,9 @@ function enable() {
 
     resizeOpId = global.window_manager.connect('size-change', (e, actor, op) => {
         if (op == 0) {
-            maximizeStart(actor, op);
+            if (!actor.meta_window.get_tile_match()) {
+                maximizeStart(actor, op);
+            }
         } else {
             unmaximizeStart(actor, op);
         }
