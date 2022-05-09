@@ -34,21 +34,21 @@ const IS_4_XX_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("4");
 const IS_3_XX_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3");
 const IS_3_38_SHELL_VERSION = Config.PACKAGE_VERSION.startsWith("3.38");
 
-let extension;
+let compizWindowsEffectExtension;
 
-function init(metadata) {
-    extension = new CompizWindowsEffectExtension(metadata);
-}
+function init() {}
 
 function enable() {
-    if (extension) {
-        extension.enable();
+    compizWindowsEffectExtension = new CompizWindowsEffectExtension();
+    if (compizWindowsEffectExtension) {
+        compizWindowsEffectExtension.enable();
     }
 }   
 
 function disable() {
-    if (extension) {
-        extension.disable();
+    if (compizWindowsEffectExtension) {
+        compizWindowsEffectExtension.disable();
+        compizWindowsEffectExtension = null;
     }
 }
 
@@ -134,6 +134,15 @@ class CompizWindowsEffectExtension {
     }
 
     disable() {
+        if (this.prefs) {
+            this.prefs = null;
+        }
+        if (this.allowedGrabOp) {
+            this.allowedGrabOp = null;
+        }
+        if (this.allowedResizeOp) {
+            this.allowedResizeOp = null;
+        }
         if (this.grabOpBeginId) {
             global.display.disconnect(this.grabOpBeginId);
             this.grabOpBeginId = null;
