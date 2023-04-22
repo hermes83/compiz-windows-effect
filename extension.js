@@ -195,6 +195,8 @@ class CompizWindowsEffectExtension {
     }
 
     grabStart(window, op) {
+        op &= ~1024; // META_GRAB_OP_WINDOW_FLAG_UNCONSTRAINED
+        
         if (Meta.GrabOp.MOVING != op && (!this.prefs.RESIZE_EFFECT.get() || this.allowedResizeOp.indexOf(op) === -1)) {
             return;
         }
