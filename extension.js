@@ -286,38 +286,6 @@ const WobblyEffectBase = GObject.registerClass({},
             this.ended = false;
         }
 
-        init_coeff() {
-            this.coeff = new Array(this.Y_TILES + 1);
-            let x, y, tx, ty, tx1, tx2, tx3, tx4, ty1, ty2, ty3, ty4;
-
-            for (y = this.Y_TILES; y >= 0; y--) {
-                ty = y / this.Y_TILES;
-
-                ty1 = (1 - ty) * (1 - ty) * (1 - ty);
-                ty2 = ty * (1 - ty) * (1 - ty);
-                ty3 = ty * ty * (1 - ty);
-                ty4 = ty * ty * ty;
-
-                this.coeff[y] = new Array(this.X_TILES + 1);
-        
-                for (x = this.X_TILES; x >= 0; x--) {
-                    tx = x / this.X_TILES;
-
-                    tx1 = (1 - tx) * (1 - tx) * (1 - tx);
-                    tx2 = tx * (1 - tx) * (1 - tx);
-                    tx3 = tx * tx * (1 - tx);
-                    tx4 = tx * tx * tx;
-                    
-                    this.coeff[y][x] = [
-                        tx1 * ty1, 3 * tx2 * ty1, 3 * tx3 * ty1, tx4 * ty1,
-                        3 * tx1 * ty2, 9 * tx2 * ty2, 9 * tx3 * ty2, 3 * tx4 * ty2,
-                        3 * tx1 * ty3, 9 * tx2 * ty3, 9 * tx3 * ty3, 3 * tx4 * ty3,
-                        tx1 * ty4, 3 * tx2 * ty4, 3 * tx3 * ty4, tx4 * ty4
-                    ];
-                }
-            }
-        }
-
         vfunc_set_actor(actor) {
             super.vfunc_set_actor(actor);
 
