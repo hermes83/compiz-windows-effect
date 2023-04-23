@@ -195,9 +195,9 @@ class CompizWindowsEffectExtension {
     }
 
     grabStart(window, op) {
-        op &= ~1024; // META_GRAB_OP_WINDOW_FLAG_UNCONSTRAINED
-        
-        if (Meta.GrabOp.MOVING != op && (!this.prefs.RESIZE_EFFECT.get() || this.allowedResizeOp.indexOf(op) === -1)) {
+        if (Meta.GrabOp.MOVING != op && 
+            (!Meta.GrabOp.MOVING_UNCONSTRAINED || Meta.GrabOp.MOVING_UNCONSTRAINED != op) &&
+            (!this.prefs.RESIZE_EFFECT.get() || this.allowedResizeOp.indexOf(op) === -1)) {
             return;
         }
         
@@ -208,7 +208,7 @@ class CompizWindowsEffectExtension {
 
         this.destroyActorEffect(actor);
 
-        if (Meta.GrabOp.MOVING === op) {
+        if (Meta.GrabOp.MOVING === op || Meta.GrabOp.MOVING_UNCONSTRAINED === op) {
             actor.add_effect_with_name(this.EFFECT_NAME, new WobblyEffect({op: 'move'}));
         } else {
             actor.add_effect_with_name(this.EFFECT_NAME, new ResizeEffect({op: op}));
