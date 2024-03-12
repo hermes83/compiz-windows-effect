@@ -2,10 +2,11 @@
   "description": "Compiz wobbly windows effect thanks to compiz plugin engine.\n\nDoes NOT requires any external library\n\nNB:\nIn case of update error please restart Gnome Shell (on Xorg press ALT+F2 then write r and press enter, on Wayland end the session and log in again)\n\n-----------------------------------\n  Video\n-----------------------------------\nhttps://youtu.be/G8bAVIB9A7A",
   "name": "Compiz windows effect",
   "shell-version": [
-    "45"
+    "45",
+    "46"
   ],
   "url": "https://github.com/hermes83/compiz-windows-effect",
   "uuid": "compiz-windows-effect@hermes83.github.com",
   "settings-schema": "org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect",
-  "version": 23
+  "version": 24
 }
