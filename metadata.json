@@ -4,10 +4,11 @@
   "shell-version": [
     "45",
     "46",
-    "47"
+    "47",
+    "48"
   ],
   "url": "https://github.com/hermes83/compiz-windows-effect",
   "uuid": "compiz-windows-effect@hermes83.github.com",
   "settings-schema": "org.gnome.shell.extensions.com.github.hermes83.compiz-windows-effect",
-  "version": 25
+  "version": 26
 }
