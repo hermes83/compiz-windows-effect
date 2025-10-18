@@ -24,6 +24,7 @@
 'use strict';
 
 import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
@@ -113,7 +114,14 @@ export default class CompizWindowsEffectExtension extends Extension {
 
             this.resizedActor = null;
             
-            if (actor.metaWindow.get_maximize_flags()) {
+            var metaWindow_maximized = 0;
+            if (Shell.get_version() > 48){
+                metaWindow_maximized = actor.metaWindow.get_maximize_flags()
+            } else {
+                metaWindow_maximized = actor.metaWindow.get_maximized()
+            }
+            
+            if (metaWindow_maximized) {
                 this.destroyActorEffect(actor);
 
                 if (!this.settingsData.MAXIMIZE_EFFECT.get()) {
@@ -122,9 +130,9 @@ export default class CompizWindowsEffectExtension extends Extension {
 
                 let monitor = Main.layoutManager.monitors[actor.meta_window.get_monitor()];
                 
-                if (actor.metaWindow.get_maximize_flags() === Meta.MaximizeFlags.BOTH || 
+                if (metaWindow_maximized === Meta.MaximizeFlags.BOTH || 
                         (
-                            actor.metaWindow.get_maximize_flags() === Meta.MaximizeFlags.VERTICAL && 
+                            metaWindow_maximized === Meta.MaximizeFlags.VERTICAL && 
                             (
                                 (sourceRect.y != targetRect.y) || 
                                 (sourceRect.y + sourceRect.height != targetRect.y + targetRect.height) || 
