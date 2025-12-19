@@ -32,16 +32,24 @@ import { SettingsData } from './settings_data.js';
 
 export default class Prefs extends ExtensionPreferences {
 
-    fillPreferencesWindow(window) {
-        const settingsData = new SettingsData(this.getSettings());
+    fillPreferencesWindow(window) {        
+        this.presets = [
+            { code: 'S', label: 'Subtle', friction: 1.5, springK: 1.0, speedupFactor: 6.0, mass: 80.0 },
+            { code: 'R', label: 'Realistic', friction: 3.5, springK: 3.8, speedupFactor: 12.0, mass: 70.0 },
+            { code: 'E', label: 'Exaggerated', friction: 5.0, springK: 4.2, speedupFactor: 15.0, mass: 50.0 },
+            { code: 'X', label: 'Extreme', friction: 7.0, springK: 5.5, speedupFactor: 19.0, mass: 25.0 },
+            { code: 'P', label: 'Personalized' }
+        ];
 
+        const settingsData = new SettingsData(this.getSettings());
         const width = 750;
-        const height = 580;
+        const height = 620;
         window.set_default_size(width, height);
 
         const page = Adw.PreferencesPage.new();
 
         const group1 = Adw.PreferencesGroup.new();
+        this.presetComboBox = this.addPresetComboBox(group1, "Preset", settingsData);
         this.frictionSlider = this.addSlider(group1, "Friction", settingsData.FRICTION, 1.0, 10.0, 1);
         this.springKSlider = this.addSlider(group1, "Spring", settingsData.SPRING_K, 1.0, 10.0, 1);
         this.speedupFactor = this.addSlider(group1, "Speedup Factor", settingsData.SPEEDUP_FACTOR, 2.0, 40.0, 1);
@@ -57,6 +65,8 @@ export default class Prefs extends ExtensionPreferences {
 
         this.addResetButton(window, settingsData);
 
+        this.applyVisibleEffect(settingsData.PRESET.get() === 'P');
+
         window.add(page);
     }
 
@@ -65,15 +75,20 @@ export default class Prefs extends ExtensionPreferences {
         button.set_icon_name('edit-clear');
 
         button.connect('clicked', () => {
-            settingsData.FRICTION.set(3.5);
-            settingsData.SPRING_K.set(3.8);
-            settingsData.SPEEDUP_FACTOR.set(12.0);
-            settingsData.MASS.set(70.0);
+            const preset = this.presets.find(v => v.code === 'R');
+            const presetIndex = this.presets.findIndex(v => v.code === 'R');
+
+            settingsData.PRESET.set(preset.code);
+            settingsData.FRICTION.set(preset.friction);
+            settingsData.SPRING_K.set(preset.springK);
+            settingsData.SPEEDUP_FACTOR.set(preset.speedupFactor);
+            settingsData.MASS.set(preset.mass);
             settingsData.X_TILES.set(6.0);
             settingsData.Y_TILES.set(6.0);
             settingsData.MAXIMIZE_EFFECT.set(true);
             settingsData.RESIZE_EFFECT.set(false);
     
+            this.presetComboBox.set_active(presetIndex);
             this.frictionSlider.set_value(settingsData.FRICTION.get());
             this.springKSlider.set_value(settingsData.SPRING_K.get());
             this.speedupFactor.set_value(settingsData.SPEEDUP_FACTOR.get());
@@ -82,6 +97,8 @@ export default class Prefs extends ExtensionPreferences {
             this.yTilesSlider.set_value(settingsData.Y_TILES.get());
             this.maximizeEffectSwitch.set_active(settingsData.MAXIMIZE_EFFECT.get());
             this.resizeEffectSwitch.set_active(settingsData.RESIZE_EFFECT.get());
+
+            this.applyVisibleEffect(false);
         });
 
         const header = this.findWidgetByType(window.get_content(), Adw.HeaderBar);
@@ -90,6 +107,53 @@ export default class Prefs extends ExtensionPreferences {
         }
         
         return button;
+    }
+
+    addPresetComboBox(group, labelText, settingsData) {
+        let gtkComboBoxText = new Gtk.ComboBoxText({hexpand: true, halign: Gtk.Align.END});
+        gtkComboBoxText.set_valign(Gtk.Align.CENTER);
+
+        let activeIndex = 0;
+        let activeValue = settingsData.PRESET.get();
+
+        for (let i = 0; i < this.presets.length; i++) {
+            gtkComboBoxText.append_text(this.presets[i].label);
+            if (activeValue && activeValue == this.presets[i].code) {
+                activeIndex = i;
+            }
+        }
+
+        const self = this;
+        gtkComboBoxText.set_active(activeIndex);
+        gtkComboBoxText.connect('changed', function (sw) {
+            var newval = self.presets[sw.get_active()].code;
+            if (newval != settingsData.PRESET.get()) {
+                settingsData.PRESET.set(newval);
+
+                if (newval !== 'P') {
+                    const preset = self.presets.find(v => v.code === newval);
+                
+                    settingsData.FRICTION.set(preset.friction);
+                    settingsData.SPRING_K.set(preset.springK);
+                    settingsData.SPEEDUP_FACTOR.set(preset.speedupFactor);
+                    settingsData.MASS.set(preset.mass);
+
+                    self.frictionSlider.set_value(settingsData.FRICTION.get());
+                    self.springKSlider.set_value(settingsData.SPRING_K.get());
+                    self.speedupFactor.set_value(settingsData.SPEEDUP_FACTOR.get());
+                    self.massSlider.set_value(settingsData.MASS.get());
+                }
+
+                self.applyVisibleEffect(newval=== 'P');
+            }
+        });
+
+        const row = Adw.ActionRow.new();
+        row.set_title(labelText);
+        row.add_suffix(gtkComboBoxText);
+        group.add(row);
+        
+        return gtkComboBoxText;
     }
     
     addSlider(group, labelText, settingsData, lower, upper, decimalDigits) {
@@ -135,6 +199,13 @@ export default class Prefs extends ExtensionPreferences {
         group.add(row);
         
         return gtkSwitch;
+    }
+
+    applyVisibleEffect(visible) {
+        this.frictionSlider.get_parent().get_parent().get_parent().set_visible(visible);
+        this.springKSlider.get_parent().get_parent().get_parent().set_visible(visible);
+        this.speedupFactor.get_parent().get_parent().get_parent().set_visible(visible);
+        this.massSlider.get_parent().get_parent().get_parent().set_visible(visible);
     }
 
     findWidgetByType(parent, type) {
