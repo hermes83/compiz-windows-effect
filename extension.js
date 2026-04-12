@@ -26,7 +26,6 @@
 import Meta from 'gi://Meta';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import { SettingsData } from './settings_data.js';
@@ -128,7 +127,7 @@ export default class CompizWindowsEffectExtension extends Extension {
 
             this.resizedActor = null;
 
-            const metaWindowMaximized = Config.PACKAGE_VERSION >= 49 ? actor.metaWindow.get_maximize_flags() : actor.metaWindow.get_maximized();
+            const metaWindowMaximized = actor.metaWindow.get_maximize_flags();
             if (metaWindowMaximized) {
                 this.destroyActorEffect(actor);
 
