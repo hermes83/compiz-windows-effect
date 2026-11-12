@@ -102,10 +102,20 @@ export default class CompizWindowsEffectExtension extends Extension {
                 return;
             }
 
+            if (op === Meta.SizeChange.MINIMIZE) {
+                this.destroyActorEffect(actor);
+                this.resizedActor = null;
+                return;
+            }
+
             this.resizedActor = actor;
             this.resizedActor.sourceRect = actor.meta_window.get_frame_rect();
 
             if (!op || Meta.SizeChange.UNMAXIMIZE != op) {
+                return;
+            }
+
+            if (!this.settingsData.MAXIMIZE_EFFECT.get()) {
                 return;
             }
 
